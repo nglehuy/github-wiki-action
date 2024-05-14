@@ -33,17 +33,11 @@ $.cwd = d;
 process.env.GH_TOKEN = core.getInput("token");
 process.env.GH_HOST = new URL(core.getInput("github_server_url")).host;
 await $`gh auth setup-git`;
+await $`git config --global --add safe.directory ${process.cwd()}`;
 
-if (core.getInput("strategy") === "clone") {
-  await $`git config --global --add safe.directory ${process.cwd()}`;
-  await $`git clone ${wikiGitURL} .`;
-} else if (core.getInput("strategy") === "init") {
-  await $`git init -b master`;
-  await $`git remote add origin ${wikiGitURL}`;
-  await $`git fetch`;
-} else {
-  throw new DOMException("Unknown strategy", "NotSupportedError");
-}
+await $`git init -b master`;
+await $`git remote add origin ${wikiGitURL}`;
+await $`git fetch`;
 
 // https://github.com/stefanzweifel/git-auto-commit-action/blob/master/action.yml#L35-L42
 await $`git config --global user.name github-actions[bot]`;
@@ -93,13 +87,12 @@ await $`git commit --allow-empty -m ${core.getInput("commit_message")}`;
 
 let gitOptions = '';
 
-if (core.getInput("strategy") === "init") gitOptions += ' -f';
 if (core.getBooleanInput("dry_run")) {
   gitOptions += ' --dry-run';
   await $`git show`;
 }
 
 await $`git remote show origin`;
-await $`git push ${gitOptions} origin ${core.getInput("branch")}`;
+await $`git push -f ${gitOptions} origin master`;
 
 core.setOutput("wiki_url", `${serverURL}/${repo}/wiki`);
