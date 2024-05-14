@@ -27,6 +27,7 @@ const repo = core.getInput("repository");
 const wikiGitURL = `${serverURL}/${repo}.wiki.git`;
 const workspacePath = process.cwd();
 console.log(workspacePath);
+await $`rm -rf ${workspacePath}/.git` // clean .git from source, so that it won't copy
 const d = temporaryDirectory();
 process.chdir(d);
 $.cwd = d;
@@ -85,7 +86,6 @@ if (core.getBooleanInput("preprocess")) {
 }
 
 await $`ls -al`;
-await $`ls -al ${process.cwd()}`;
 await $`git add -Av`;
 await $`git commit --allow-empty -m ${core.getInput("commit_message")}`;
 
