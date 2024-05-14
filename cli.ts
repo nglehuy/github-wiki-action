@@ -91,11 +91,12 @@ if (core.getBooleanInput("preprocess")) {
 await $`git add -Av`;
 await $`git commit --allow-empty -m ${core.getInput("commit_message")}`;
 
-if (core.getBooleanInput("dry_run")) {
-  await $`git show`;
-  await $`git push -f origin ${core.getInput("branch")} --dry-run`;
-} else {
-  await $`git push -f origin ${core.getInput("branch")}`;
-}
+let gitOptions = '';
+
+if (core.getInput("strategy") === "init") gitOptions += ' -f';
+if (core.getBooleanInput("dry_run")) gitOptions += ' --dry-run';
+
+await $`git show`;
+await $`git push ${gitOptions} origin ${core.getInput("branch")}`;
 
 core.setOutput("wiki_url", `${serverURL}/${repo}/wiki`);
