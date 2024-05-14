@@ -26,6 +26,7 @@ const serverURL = core.getInput("github_server_url");
 const repo = core.getInput("repository");
 const wikiGitURL = `${serverURL}/${repo}.wiki.git`;
 const workspacePath = process.cwd();
+console.log(workspacePath);
 const d = temporaryDirectory();
 process.chdir(d);
 $.cwd = d;
