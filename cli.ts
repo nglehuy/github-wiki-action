@@ -47,7 +47,7 @@ await $`git config --global user.email 41898282+github-actions[bot]@users.norepl
 
 await appendFile(".git/info/exclude", core.getInput("ignore"));
 await copy(resolve(workspacePath, core.getInput("path")), process.cwd());
-await copy(resolve(workspacePath, 'README.md'), process.cwd());
+await copy(resolve(workspacePath, 'README.md'), `${process.cwd()}/README.md`);
 
 if (core.getBooleanInput("preprocess")) {
   // https://github.com/nodejs/node/issues/39960
