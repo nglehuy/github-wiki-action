@@ -71,6 +71,11 @@ inputs:
       default is true.
     required: true
     default: true
+  branch:
+    description: >-
+      Default branch to push commits to repository. The default is main
+    required: true
+    default: main
 outputs:
   wiki_url:
     description: >-
@@ -94,3 +99,4 @@ runs:
         INPUT_IGNORE: ${{ inputs.ignore }}
         INPUT_DRY_RUN: ${{ inputs.dry-run }}
         INPUT_PREPROCESS: ${{ inputs.preprocess }}
+        INPUT_BRANCH: ${{ inputs.branch }}
