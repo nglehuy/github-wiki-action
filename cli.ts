@@ -34,9 +34,9 @@ $.cwd = d;
 process.env.GH_TOKEN = core.getInput("token");
 process.env.GH_HOST = new URL(core.getInput("github_server_url")).host;
 
-await $`ls -al`;
 await $`gh auth setup-git`;
 await $`git config --global --add safe.directory ${process.cwd()}`;
+await $`cd ${process.cwd()}`;
 
 await $`git init -b master`;
 await $`git remote add origin ${wikiGitURL}`;
@@ -85,6 +85,7 @@ if (core.getBooleanInput("preprocess")) {
   }
 }
 
+await $`ls -al`;
 await $`git add -Av`;
 await $`git commit --allow-empty -m ${core.getInput("commit_message")}`;
 
