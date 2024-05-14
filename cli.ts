@@ -93,9 +93,9 @@ await $`git commit --allow-empty -m ${core.getInput("commit_message")}`;
 
 if (core.getBooleanInput("dry_run")) {
   await $`git show`;
-  await $`git push -f origin master --dry-run`;
+  await $`git push -f origin core.getInput("branch") --dry-run`;
 } else {
-  await $`git push -f origin master`;
+  await $`git push -f origin core.getInput("branch")`;
 }
 
 core.setOutput("wiki_url", `${serverURL}/${repo}/wiki`);
