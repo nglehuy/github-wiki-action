@@ -33,6 +33,8 @@ $.cwd = d;
 
 process.env.GH_TOKEN = core.getInput("token");
 process.env.GH_HOST = new URL(core.getInput("github_server_url")).host;
+
+await $`ls -al`;
 await $`gh auth setup-git`;
 await $`git config --global --add safe.directory ${process.cwd()}`;
 
