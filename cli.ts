@@ -94,9 +94,12 @@ await $`git commit --allow-empty -m ${core.getInput("commit_message")}`;
 let gitOptions = '';
 
 if (core.getInput("strategy") === "init") gitOptions += ' -f';
-if (core.getBooleanInput("dry_run")) gitOptions += ' --dry-run';
+if (core.getBooleanInput("dry_run")) {
+  gitOptions += ' --dry-run';
+  await $`git show`;
+}
 
-await $`git show`;
+await $`git remote show origin`;
 await $`git push ${gitOptions} origin ${core.getInput("branch")}`;
 
 core.setOutput("wiki_url", `${serverURL}/${repo}/wiki`);
