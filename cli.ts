@@ -27,7 +27,6 @@ const repo = core.getInput("repository");
 const wikiGitURL = `${serverURL}/${repo}.wiki.git`;
 const workspacePath = process.cwd();
 console.log(workspacePath);
-await $`rm -rf ${workspacePath}/.git` // clean .git from source, so that it won't copy
 const d = temporaryDirectory();
 process.chdir(d);
 $.cwd = d;
@@ -48,6 +47,7 @@ await $`git config --global user.email 41898282+github-actions[bot]@users.norepl
 
 await appendFile(".git/info/exclude", core.getInput("ignore"));
 await copy(resolve(workspacePath, core.getInput("path")), process.cwd());
+await copy(resolve(workspacePath, 'README.md'), process.cwd());
 
 if (core.getBooleanInput("preprocess")) {
   // https://github.com/nodejs/node/issues/39960
@@ -59,6 +59,8 @@ if (core.getBooleanInput("preprocess")) {
   const mdRe = /\.(?:md|markdown|mdown|mkdn|mkd|mdwn|mkdown|ron)$/;
   const plugin = () => (tree: any) =>
     visit(tree, ["link", "linkReference"], (node: any) => {
+      console.log(node);
+
       if (!mdRe.test(node.url)) {
         return;
       }
